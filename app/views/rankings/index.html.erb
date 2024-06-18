@@ -1,0 +1,20 @@
+<h1>사용자 랭킹</h1>
+<table>
+  <thead>
+  <tr>
+    <th>순위</th>
+    <th>사용자명</th>
+    <th>정답률</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.each_with_index do |user, index| %>
+    <tr>
+      <td><%= index + 1 %></td>
+      <td><%= user.username %></td>
+      <td><%= user.correct_rate.round(2) %> %</td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= link_to '메인 메뉴로 돌아가기', main_menu_path %>

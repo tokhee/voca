@@ -1,0 +1,158 @@
+/* 공통 버튼 스타일 */
+.button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+*{
+    font-family: "Unica77 LL", serif;
+}
+
+.return-button{
+    justify-content: center;
+
+}
+
+.index-container{
+    display: flex;
+justify-content: center;
+}
+
+.search-container{
+    width: 600px;
+    display: flex;
+
+}
+
+.primary-button {
+    background-color: #007bff;
+    color: white;
+}
+
+
+
+.primary-button:hover {
+    background-color: #0056b3;
+}
+/* 검색 섹션 스타일 */
+.search-section {
+    margin-bottom: 20px;
+}
+
+
+/* 폼 스타일 */
+.form {
+    max-width: 600px;
+    margin: 0 auto 20px;
+}
+
+.stacked-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.form-control-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.half-width {
+    width: 50%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* 폼 컨트롤 스타일 */
+.form-control {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 알림 스타일 */
+.alert {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.error-alert {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+/* 중첩된 필드 컨테이너 스타일 */
+.nested-fields-container {
+    margin-top: 20px;
+}
+
+/* 중첩된 필드 스타일 */
+.nested-fields {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* 제거 버튼 스타일 */
+.remove-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+
+}
+
+.remove-button:hover {
+    background-color: #c82333;
+}
+
+
+/* 테이블 스타일 */
+.table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+

@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="greeting">
+    <% if current_user %>
+      <h1>こんにちは！<%= current_user.username %></h1>
+    <% else %>
+      <h1>こんにちは！ゲスト</h1>
+    <% end %>
+  </div>
+  <div class="menu">
+    <ul>
+      <li><a href="<%= words_path %>">単語マスタ</a></li>
+      <li><a href="<%= tags_path %>">単語タグマスタ</a></li>
+      <li><a href="<%= quizzes_path %>">単語帳</a></li>
+      <li><a href="<%= rankings_path %>">ランキング</a></li>
+      <li><a href="<%= logout_path %>" data-method="delete">ログアウト</a></li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="form-container">
+  <%= form_with(model: @word, local: true, html: { class: "form stacked-form" }) do |form| %>
+    <% if @word.errors.any? %>
+      <div class="alert error-alert">
+        <h2><%= pluralize(@word.errors.count, "error") %> prohibited this word from being saved:</h2>
+        <ul>
+          <% @word.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <div class="form-control-group">
+        <%= form.label :title, class: "form-label" %>
+        <%= form.text_field :title, class: "form-control" %>
+      </div>
+
+      <div class="form-control-group">
+        <%= form.label :mean, class: "form-label" %>
+        <%= form.text_field :mean, class: "form-control" %>
+      </div>
+
+      <div class="form-control-group">
+        <%= form.label :similar, class: "form-label" %>
+        <div class="nested-fields-container">
+          <%= link_to_add_association 'Add Similar', form, :similars, class: "button primary-button" %>
+        </div>
+
+        <div class="form-control-group">
+          <%= form.label :tag, class: "form-label" %>
+          <%= form.collection_select(:tag, current_user.tags, :id, :name, {}, { class: "form-control" }) %>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-control-group">
+        <%= form.submit "Save Word", class: "button primary-button" %>
+      </div>
+
+      <div class="return-button">
+        <%= link_to '戻る', words_path, class: "button" %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

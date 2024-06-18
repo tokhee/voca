@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>태그 리스트</title>
+  <%= stylesheet_link_tag 'tags' %>
+</head>
+<body>
+
+<section class="search-section">
+  <%= form_with(url: tags_path, method: "get", local: true, html: { class: "form" }) do |form| %>
+    <fieldset class="form-group">
+      <%= form.text_field :search, class: "form-control half-width", placeholder: "検索キーワードを入力してください" %>
+    </fieldset>
+    <%= form.submit "検索", class: "button primary-button" %>
+  <% end %>
+</section>
+
+<div class="index-container">
+  <div class="search-container">
+    <%= link_to "new", new_tag_path, class: "button primary-button" %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>name</th>
+    <th>create date</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @tags.each do |tag| %>
+    <tr>
+      <td><%= tag.name %></td>
+      <td><%= tag.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+      <td><%= link_to "edit", edit_tag_path(tag), class: "button" %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <%= paginate @tags %>
+</div>
+
+</body>
+</html>

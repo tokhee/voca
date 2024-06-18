@@ -1,0 +1,138 @@
+<h1><%= @quiz.title %></h1>
+
+<div id="question-container" class="question-box">
+  <!-- 부분 뷰를 렌더링하고, 필요한 변수들을 locals로 전달합니다. -->
+  <%= render partial: 'questions/question', locals: { question: @current_question, choices: @choices, next_question_id: @next_question_id, question_index: @questions.index(@current_question) + 1, total_questions: @questions.size } %>
+</div>
+
+<div class="controls">
+  <!-- 이전 문제로 이동하는 버튼, 이전 문제가 없으면 hidden 클래스를 추가하여 숨깁니다. -->
+  <button id="prev-btn" class="<%= 'hidden' if @previous_question_id.nil? %>" data-url="<%= @previous_question_id ? question_path(@previous_question_id, format: :js) : '#' %>">前の問題へ</button>
+  <!-- 다음 문제로 이동하는 버튼, 다음 문제가 없으면 hidden 클래스를 추가하여 숨기고, 채점하기 버튼을 표시합니다. -->
+  <button id="next-btn" class="<%= 'hidden' if @next_question_id.nil? %>" data-url="<%= @next_question_id ? question_path(@next_question_id, format: :js) : '#' %>">次の問題へ</button>
+  <button id="grade-btn" class="hidden" data-url="<%= grade_quiz_path(@quiz, format: :js) %>">採点する</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // URL로부터 질문을 로드하는 함수
+        const loadQuestion = (url) => {
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error(`HTTP error! status: ${response.status}`);
+                  }
+                  return response.text();
+              })
+              .then(data => {
+                  // 질문 컨테이너의 내용을 새로운 질문으로 대체합니다.
+                  document.querySelector('#question-container').innerHTML = data;
+                  updateControls(); // 새로 로드된 콘텐츠에 이벤트 리스너 다시 등록
+              })
+              .catch(error => console.error('Error:', error));
+        };
+
+        // 컨트롤 버튼을 업데이트하는 함수
+        const updateControls = () => {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const gradeBtn = document.getElementById('grade-btn');
+
+            if (prevBtn) {
+                // 이전 클릭 이벤트 리스너를 제거하고 다시 추가합니다.
+                prevBtn.removeEventListener('click', handlePrevClick);
+                prevBtn.addEventListener('click', handlePrevClick);
+            }
+
+            if (nextBtn) {
+                // 다음 클릭 이벤트 리스너를 제거하고 다시 추가합니다.
+                nextBtn.removeEventListener('click', handleNextClick);
+                nextBtn.addEventListener('click', handleNextClick);
+            }
+
+            if (gradeBtn) {
+                // 채점 클릭 이벤트 리스너를 제거하고 다시 추가합니다.
+                gradeBtn.removeEventListener('click', handleGradeClick);
+                gradeBtn.addEventListener('click', handleGradeClick);
+            }
+
+            // 다음 버튼의 URL이 'grade'를 포함하면 '採点する'로 텍스트를 변경합니다.
+            if (nextBtn.dataset.url.includes('grade')) {
+                nextBtn.classList.add('hidden');
+                gradeBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                gradeBtn.classList.add('hidden');
+                nextBtn.innerHTML = '次の問題へ';
+            }
+        };
+
+        // 이전 클릭 이벤트 핸들러
+        const handlePrevClick = (event) => {
+            event.preventDefault();
+            const prevBtn = event.currentTarget;
+            if (prevBtn.dataset.url !== '#') {
+                console.log('이전 질문 로드:', prevBtn.dataset.url);
+                loadQuestion(prevBtn.dataset.url);
+            }
+        };
+
+        // 다음 클릭 이벤트 핸들러
+        const handleNextClick = (event) => {
+            event.preventDefault();
+            const nextBtn = event.currentTarget;
+            const form = document.querySelector('.question-box form');
+            if (!form) {
+                console.error('폼을 찾을 수 없습니다');
+                return;
+            }
+            const formData = new FormData(form);
+
+            // 질문 업데이트를 위해 PATCH 요청을 보냅니다.
+            fetch(form.action, {
+                method: 'PATCH',
+                body: formData,
+                headers: {
+                    'Accept': 'application/javascript',
+                },
+                credentials: 'include'
+            })
+              .then(response => {
+                  if (response.ok) {
+                      console.log('질문 업데이트 성공:', nextBtn.dataset.url);
+                      return response.text();
+                  } else {
+                      console.error('질문 업데이트 실패');
+                      return Promise.reject(new Error('질문 업데이트 실패'));
+                  }
+              })
+              .then(data => {
+                  if (data) {
+                      // 질문 컨테이너의 내용을 업데이트된 질문으로 대체합니다.
+                      document.querySelector('#question-container').innerHTML = data;
+                      updateControls(); // 새로 로드된 콘텐츠에 이벤트 리스너 다시 등록
+                  }
+              })
+              .catch(error => {
+                  console.error('에러 발생:', error);
+              });
+        };
+
+        // 채점 클릭 이벤트 핸들러
+        const handleGradeClick = (event) => {
+            event.preventDefault();
+            const gradeBtn = event.currentTarget;
+            if (gradeBtn.dataset.url !== '#') {
+                console.log('채점 페이지로 이동:', gradeBtn.dataset.url);
+                window.location.href = gradeBtn.dataset.url;
+            }
+        };
+
+        // 초기화 시 컨트롤을 업데이트합니다.
+        updateControls();
+    });
+</script>

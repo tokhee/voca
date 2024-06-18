@@ -1,0 +1,9 @@
+<% @results.each do |result| %>
+document.querySelector(".results").innerHTML += `
+    <div class="result">
+      <p>単語: <%= result[:word].title %></p>
+      <p>あなたの回答: <%= result[:user_answer] %></p>
+      <p>結果: <%= result[:correct] ? '正解' : '不正解' %></p>
+    </div>
+  `;
+<% end %>

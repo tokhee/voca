@@ -1,0 +1,26 @@
+<div class="question-box">
+  <% if question %>
+    <h2>第<%= question_index %>問 (全<%= total_questions %>問)</h2>
+    <p>問題: <%= question.word.title %></p>
+    <p>[類似語]</p>
+    <% question.word.similars.each do |similar| %>
+      <p><%= similar.similar %></p>
+    <% end %>
+
+    <%= form_with model: question, url: question_path(question, format: :js), method: :patch, remote: true do |f| %>
+      <% if choices.present? %>
+        <% choices.each do |choice| %>
+          <div>
+            <%= f.radio_button :user_answer, choice %>
+            <%= f.label :user_answer, choice, value: choice %>
+          </div>
+        <% end %>
+      <% else %>
+        <p>選択肢が見つかりません。</p>
+      <% end %>
+      <%= f.hidden_field :answered, value: true %>
+    <% end %>
+  <% else %>
+    <p>問題が見つかりません。</p>
+  <% end %>
+</div>

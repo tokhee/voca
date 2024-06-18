@@ -1,0 +1,30 @@
+
+<div class="signup-container">
+  <%= form_with url: signup_path, model: @user, local: true do |form| %>
+    <div class="form-group">
+      <%= form.label :username, class: "form-label" %>
+      <%= form.text_field :username, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :email, class: "form-label" %>
+      <%= form.text_field :email, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :password, class: "form-label" %>
+      <%= form.password_field :password, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :password_confirm, class: "form-label" %>
+      <%= form.password_field :password_confirm, class: "form-control" %>
+    </div>
+
+    <%= form.hidden_field :highest_rate, value: 2 %>
+
+    <div class="form-group">
+      <%= form.submit "Sign Up", class: "submit-button" %>
+    </div>
+  <% end %>
+</div>

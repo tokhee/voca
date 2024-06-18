@@ -1,0 +1,26 @@
+<h1><%= @quiz.title %> の結果</h1>
+
+<div class="results">
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>単語</th>
+      <th>あなたの回答</th>
+      <th>結果</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @results.each do |result| %>
+      <tr>
+        <td><%= result[:word].title %></td>
+        <td><%= result[:user_answer] %></td>
+        <td><%= result[:correct] ? '정답' : '오답' %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+</div>
+
+<%= link_to '戻る', quizzes_path, class: 'button' %>
