@@ -1,26 +1,16 @@
-<div class="question-box">
-  <% if question %>
-    <h2>第<%= question_index %>問 (全<%= total_questions %>問)</h2>
-    <p>問題: <%= question.word.title %></p>
-    <p>[類似語]</p>
-    <% question.word.similars.each do |similar| %>
-      <p><%= similar.similar %></p>
-    <% end %>
+<!-- app/views/questions/_question.html.erb -->
+<div id="question-<%= question.id %>" data-next-question-id="<%= next_question_id %>" data-prev-question-id="<%= previous_question_id %>">
+  <p><%= question.word.title %></p>
 
-    <%= form_with model: question, url: question_path(question, format: :js), method: :patch, remote: true do |f| %>
-      <% if choices.present? %>
-        <% choices.each do |choice| %>
-          <div>
-            <%= f.radio_button :user_answer, choice %>
-            <%= f.label :user_answer, choice, value: choice %>
-          </div>
-        <% end %>
-      <% else %>
-        <p>選択肢が見つかりません。</p>
-      <% end %>
-      <%= f.hidden_field :answered, value: true %>
+  <form action="<%= question_path(question, format: :js) %>" method="post" class="question-form">
+    <p>질문 <%= question_index %> / <%= total_questions %></p>
+
+    <% choices.each do |choice| %>
+      <div>
+        <input type="radio" name="question[user_answer]" value="<%= choice %>">
+        <label><%= choice %></label>
+      </div>
     <% end %>
-  <% else %>
-    <p>問題が見つかりません。</p>
-  <% end %>
+    <input type="hidden" name="question[answered]" value="true">
+  </form>
 </div>
