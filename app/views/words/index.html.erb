@@ -1,15 +1,15 @@
+<!-- app/views/words/index.html.erb -->
 <style>
-.title{
-    text-align: center;
-}
+    .title {
+        text-align: center;
+    }
     .container {
         max-width: 1200px;
         margin: 2rem auto;
         padding: 1rem;
         background-color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
     table {
         width: 100%;
         border-collapse: collapse;
@@ -33,24 +33,22 @@
         margin: 0 0.5rem;
         text-decoration: none;
     }
-.search-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.form-group {
-    display: flex;
-    justify-content: space-between;
-
-    align-items: center;
-    width: 100%;
-}
+    .search-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
     .search-container {
         display: flex;
         justify-content: space-between;
         margin-bottom: 1rem;
     }
-
     .menu ul {
         list-style-type: none;
         padding: 0;
@@ -90,12 +88,10 @@
   <div class="search-container menu">
     <ul>
       <li>
-
-          <%= link_to "Export", words_path(format: :csv, search: params[:search], column: params[:column]), class: "primary-button" %>
+        <%= link_to "Export", words_path(format: :csv, search: params[:search], column: params[:column]), class: "primary-button" %>
       </li>
       <li>
-
-          <%= link_to "New", new_word_path %>
+        <%= link_to "New", new_word_path %>
       </li>
     </ul>
   </div>
@@ -130,6 +126,8 @@
     <% end %>
     </tbody>
   </table>
+
+
 
   <div class="pagination">
     <%= paginate @words %>

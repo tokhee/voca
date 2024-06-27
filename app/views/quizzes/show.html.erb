@@ -1,4 +1,86 @@
 <!-- app/views/quizzes/show.html.erb -->
+
+<style>
+h1{
+    text-align: center;
+}
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .menu {
+        display: flex;
+        justify-content: center;
+    }
+    .menu ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+    .menu ul li {
+        margin-right: 0;
+    }
+    .menu ul li a {
+        text-decoration: none;
+        color: #282c34;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+    .menu ul li a:hover {
+        background-color: #282c34;
+        color: white;
+    }
+    .question-box {
+        padding: 2rem;
+        border: 1px solid #ccc;
+        margin-bottom: 1rem;
+    }
+    .controls {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin-top: 1rem;
+    }
+    .controls ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: space-evenly;
+        gap: 1rem;
+    }
+    #prev-btn,#next-btn, .button{
+        text-decoration: none;
+        color: #282c34;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+    #prev-btn:hover, #next-btn:hover{
+
+        background-color: #282c34;
+         color: white;
+     }
+</style>
+
+<div class="container">
+
+  <div class="menu">
+    <ul>
+      <li><a href="<%= words_path %>">単語マスタ</a></li>
+      <li><a href="<%= tags_path %>">単語タグマスタ</a></li>
+      <li><a href="<%= quizzes_path %>">単語帳</a></li>
+      <li><a href="<%= rankings_path %>">ランキング</a></li>
+      <li><a href="<%= logout_path %>" data-method="delete">ログアウト</a></li>
+    </ul>
+  </div>
+</div>
+
 <h1><%= @quiz.title %></h1>
 
 <% if @current_question %>
@@ -7,15 +89,28 @@
   </div>
 
   <div class="controls">
-    <button id="prev-btn" data-url="#">前の問題へ</button>
-    <button id="next-btn" data-url="#">次の問題へ</button>
-    <%= button_to '中断する', save_quiz_path(@quiz), method: :post, class: 'button' %>
-    <%= button_to '採点する', grade_quiz_path(@quiz), method: :post, class: 'button' %>
+    <ul>
+      <li>
+        <button id="prev-btn" data-url="#">前の問題へ</button>
+      </li>
+      <li>
+        <button id="next-btn" data-url="#">次の問題へ</button>
+      </li>
+    </ul>
+<ul>
+    <li>
+      <%= button_to '中断する', save_quiz_path(@quiz), method: :post, class: 'button' %>
+    </li>
+    <li>
+      <%= button_to '採点する', grade_quiz_path(@quiz), method: :post, class: 'button' %>
+    </li>
+    </ul>
   </div>
 <% else %>
   <p>퀴즈에 질문이 없습니다.</p>
   <%= link_to '퀴즈 목록으로 돌아가기', quizzes_path, class: 'button' %>
 <% end %>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {

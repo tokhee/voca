@@ -4,8 +4,8 @@ class SessionsController < ApplicationController
   before_action :set_current_user
 
   def index
-
   end
+
   def new
   end
 
@@ -16,8 +16,12 @@ class SessionsController < ApplicationController
         session[:user_id] = @user.id
         redirect_to main_menu_path(@user)
       else
-        render :new
+        flash[:alert] = 'Eメールまたはパスワードが無効です'
+        render :form
       end
+    else
+      flash[:alert] = 'Eメールとパスワードを入力します'
+      render :form
     end
   end
 
@@ -29,9 +33,6 @@ class SessionsController < ApplicationController
   private
 
   def set_current_user
-    if session[:user_id]
-      @user = User.find_by(id: session[:user_id])
-    end
+    @user = User.find_by(id: session[:user_id]) if session[:user_id]
   end
-
 end

@@ -1,4 +1,4 @@
-<!-- app/views/users/new.html.erb -->
+<!-- app/views/users/_form.html.erb -->
 
 <style>
     .signup-container {
@@ -49,25 +49,25 @@
     <div class="form-group">
       <%= form.label :username, class: "form-label" %>
       <%= form.text_field :username, class: "form-control", id: "username" %>
-      <div id="username-validation" class="validation-message">Username must be unique and present.</div>
+      <div id="username-validation" class="validation-message">ユーザ名は一意であり、存在する必要があります。</div>
     </div>
 
     <div class="form-group">
       <%= form.label :email, class: "form-label" %>
       <%= form.text_field :email, class: "form-control", id: "email" %>
-      <div id="email-validation" class="validation-message">Email must be unique and valid.</div>
+      <div id="email-validation" class="validation-message">Eメールは一意で有効である必要があります。.</div>
     </div>
 
     <div class="form-group">
       <%= form.label :password, class: "form-label" %>
       <%= form.password_field :password, class: "form-control", id: "password" %>
-      <div id="password-validation" class="validation-message">Password must be between 1 and 8 characters.</div>
+      <div id="password-validation" class="validation-message">パスワードは 1 ~ 8 文字である必要があります。</div>
     </div>
 
     <div class="form-group">
       <%= form.label :password_confirm, class: "form-label" %>
       <%= form.password_field :password_confirm, class: "form-control", id: "password_confirm" %>
-      <div id="password-confirm-validation" class="validation-message">Passwords must match.</div>
+      <div id="password-confirm-validation" class="validation-message">パスワードは一致する必要があります.</div>
     </div>
 
     <%= form.hidden_field :highest_rate, value: 2 %>

@@ -47,6 +47,7 @@ class QuizzesController < ApplicationController
     end
 
     @quiz.calculate_score
+    current_user.update_correct_rate  # 정답률 업데이트
     redirect_to results_quiz_path(@quiz)
   end
 

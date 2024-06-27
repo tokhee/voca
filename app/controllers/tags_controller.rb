@@ -18,7 +18,7 @@ class TagsController < ApplicationController
     if @tag.save
       redirect_to tags_path
     else
-      render :new
+      render :form
     end
   end
 
@@ -32,7 +32,7 @@ class TagsController < ApplicationController
     if @tag.save
       redirect_to tags_path
     else
-      render :new
+      render :form
     end
   end
 

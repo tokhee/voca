@@ -13,4 +13,11 @@ class Question < ApplicationRecord
   def correct?
     user_answer.to_s.strip.downcase == word.mean.strip.downcase
   end
+
+  private
+
+  def set_order
+    self.order = quiz.questions.maximum(:order).to_i + 1
+  end
 end
+

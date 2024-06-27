@@ -1,6 +1,73 @@
-
-
+<!-- app/views/sessions/_form.html.erb -->
+<style>
+  h2{
+      text-align: center;
+  }
+    .login-container {
+        max-width: 400px;
+        margin: 5rem auto;
+        padding: 2rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .submit-button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #282c34;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .submit-button:hover {
+        background-color: #3c4048;
+    }
+    .signup-link {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        color: #007bff;
+        text-decoration: none;
+    }
+    .signup-link:hover {
+        text-decoration: underline;
+    }
+    .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+</style>
 <div class="login-container">
+  <h2>LOGIN</h2>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger"><%= flash[:alert] %></div>
+  <% end %>
+
   <%= form_with(url: login_path, scope: :session, local: true) do |form| %>
     <div class="form-group">
       <%= form.label :email %>

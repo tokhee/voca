@@ -1,3 +1,84 @@
+<!-- app/views/words/_form.html.erb -->
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .form-control-group {
+        display: flex;
+        flex-direction: column;
+    }
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .button {
+        display: inline-block;
+        padding: 0.75rem;
+        background-color: #282c34;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-align: center;
+    }
+    .button:hover {
+        background-color: #3c4048;
+    }
+    .primary-button {
+        background-color: #282c34;
+    }
+    .primary-button:hover {
+        background-color: #3c4048;
+    }
+    .error-alert {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 1rem;
+        border-radius: 4px;
+    }
+    .nested-fields-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .nested-fields {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .remove-button {
+        background-color: #282c34;
+        color: white;
+        border: none;
+        padding: 0.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .remove-button:hover {
+        background-color: #3c4048;
+    }
+</style>
+
 <div class="form-container">
   <%= form_with(model: @word, local: true, html: { class: "form stacked-form" }) do |form| %>
     <% if @word.errors.any? %>
@@ -25,20 +106,25 @@
       <div class="form-control-group">
         <%= form.label :similar, class: "form-label" %>
         <div class="nested-fields-container">
-          <%= link_to_add_association 'Add Similar', form, :similars, class: "button primary-button" %>
+          <%= link_to_add_association '類似語の追加', form, :similars, class: "button primary-button", id: "add_similar_button" %>
+          <div id="similars">
+            <%= form.fields_for :similars do |similar_form| %>
+              <div class="nested-fields">
+                <%= similar_form.text_field :similar, class: "form-control" %>
+                <%= link_to_remove_association "類似語の除去", similar_form, class: "remove-button" %>
+              </div>
+            <% end %>
+          </div>
         </div>
-
-        <div class="form-control-group">
-          <%= form.label :tag, class: "form-label" %>
-          <%= form.collection_select(:tag, current_user.tags, :id, :name, {}, { class: "form-control" }) %>
-
-        </div>
-
       </div>
 
+      <div class="form-control-group">
+        <%= form.label :tag, class: "form-label" %>
+        <%= form.collection_select(:tag_ids, current_user.tags, :id, :name, {}, { class: "form-control" }) %>
+      </div>
 
       <div class="form-control-group">
-        <%= form.submit "Save Word", class: "button primary-button" %>
+        <%= form.submit "保存", class: "button primary-button" %>
       </div>
 
       <div class="return-button">
@@ -46,5 +132,17 @@
       </div>
     </div>
   <% end %>
-
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addBtn = document.querySelector('#add_similar_button');
+        addBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('cocoon:after-insert', function(e) {
+            console.log('New nested field added.');
+        });
+    });
+</script>

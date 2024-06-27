@@ -1,3 +1,4 @@
+# config/routes.rb
 Rails.application.routes.draw do
   root 'sessions#new'
 
@@ -14,18 +15,20 @@ Rails.application.routes.draw do
   resources :tags
   resources :words
 
+  post 'create_quiz', to: 'quizzes#create', as: 'create_quiz'
+
+  get 'rankings', to: 'rankings#index'
+
   resources :quizzes do
     member do
-      get :continue
-      get :restart
-      get :show_answers
-      get :grade
+      post :grade
+      post :restart
       get :results
+      get :continue
+      post :save
     end
   end
 
-  post 'create_quiz', to: 'quizzes#create', as: 'create_quiz'
+  resources :questions, only: [:show, :update]
 
-  resources :questions
-  get 'rankings', to: 'rankings#index'
 end

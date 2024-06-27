@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:update]
   before_action :set_question, only: [:show, :update]
+  skip_before_action :verify_authenticity_token, only: [:update]
 
   def show
     load_question_data(@question)
@@ -9,7 +9,11 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
+      @question.correct = @question.user_answer == @question.word.mean
+      @question.save
+
       @question.quiz.update_current_question(@question)
+      @question.quiz.calculate_score
 
       next_question = @question.quiz.next_question
       previous_question = @question.quiz.previous_question

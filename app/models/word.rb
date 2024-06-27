@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Word < ApplicationRecord
   belongs_to :user
   has_many :similars, dependent: :destroy
@@ -7,5 +6,4 @@ class Word < ApplicationRecord
   validates :title, presence: true
   validates :mean, presence: true
   accepts_nested_attributes_for :similars, allow_destroy: true
-
 end

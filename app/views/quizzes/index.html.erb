@@ -1,14 +1,85 @@
+<!-- app/views/quizzes/index.html.erb -->
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .quizzes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-top: 10px;
+    }
+    .quiz {
+        flex: 1 1 calc(33.333% - 2rem);
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+        position: relative; /* For positioning the buttons on the right */
+        height: 180px;
+width: 450px;
+    }
+    .quiz:hover {
+        transform: translateY(-5px);
+    }
+    .quiz h2 {
+        margin-top: 0;
+    }
+    .quiz p {
+        color: #666;
+    }
+    .button {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 5px 5px;
+        background-color: #282c34;
+        color: white;
+        text-decoration: none;
+        border: none; /* button 요소의 기본 테두리 제거 */
+        border-radius: 4px;
+        cursor: pointer; /* pointer 커서 추가 */
+        transition: background-color 0.3s;
 
+    }
+    .button:hover {
+        background-color: #3c4048;
+    }
+    .paginate {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    .btn {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+    }
+    .title {
+        text-align: center;
+    }
+</style>
 
-<h1>퀴즈 목록</h1>
-<%= button_to '新しく単語帳を始める', create_quiz_path, method: :post, class: 'button' %><div class="quizzes">
+<h3 class="title">単語帳</h3>
+<%= button_to '新しく単語帳を始める', create_quiz_path, method: :post, class: 'button' %>
+<div class="quizzes">
   <% @quizzes.each do |quiz| %>
     <div class="quiz">
-      <h2><%= quiz.title %></h2>
+      <h3><%= quiz.title %></h3>
       <p>점수: <%= quiz.score || '아직 채점되지 않음' %></p>
+      <div class="btn">
         <%= link_to '回答を見る', results_quiz_path(quiz), class: 'button' %>
         <%= link_to '続きから', continue_quiz_path(quiz), class: 'button' %>
-        <%= link_to 'もう一度やる', restart_quiz_path(quiz), class: 'button' %>
+        <%= button_to 'もう一度やる', restart_quiz_path(quiz), method: :post, class: 'button' %>
+      </div>
     </div>
   <% end %>
 </div>

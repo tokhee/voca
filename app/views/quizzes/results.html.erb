@@ -1,31 +1,96 @@
 <!-- app/views/quizzes/results.html.erb -->
-<h1><%= @quiz.title %> の結果</h1>
+<style>
+  h1, h2 {
+      text-align: center;
+  }
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .results {
+        margin-top: 2rem;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        text-align: center;
+    }
 
-<div class="results">
+    .table th {
+        background-color: #282c34;
+        color: white;
+    }
+    .table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .score {
+        margin-top: 1rem;
+        padding: 0.5rem;
+        background-color: #e9ecef;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .button {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 5px 10px;
+        background-color: #282c34;
+        color: white;
+        text-decoration: none;
+        border: none; /* button 요소의 기본 테두리 제거 */
+        border-radius: 4px;
+        cursor: pointer; /* pointer 커서 추가 */
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #3c4048;
+    }
+.back-button {
+    display: flex;
+    justify-content: end;
 
-  <table class="table">
-    <thead>
-    <tr>
-      <th>単語</th>
-      <th>あなたの回答</th>
-      <th>結果</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @results.each do |result| %>
+}
+</style>
+
+<div class="container">
+  <h1><%= @quiz.title %> の結果</h1>
+  <div class="results">
+    <table class="table">
+      <thead>
       <tr>
-        <td><%= result[:word].title %></td>
-        <td><%= result[:user_answer] %></td>
-        <td><%= result[:correct] ? '正解' : '不正解' %></td>
+        <th>単語</th>
+        <th>あなたの回答</th>
+        <th>結果</th>
       </tr>
-    <% end %>
-    </tbody>
-  </table>
-
-  <div class="score">
-    <p>あなたのスコア: <%= @quiz.score %> / <%= @results.length %></p>
+      </thead>
+      <tbody>
+      <% @results.each do |result| %>
+        <tr>
+          <td><%= result[:word].title %></td>
+          <td><%= result[:user_answer] %></td>
+          <td><%= result[:correct] ? '正解' : '不正解' %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <div class="score">
+      <h2>あなたのスコア: <%= @quiz.score %> / <%= @results.length %></h2>
+    </div>
   </div>
+  <div class="back-button">
+    <%= link_to '戻る', quizzes_path, class: 'button' %>
 
+  </div>
 </div>
-
-<%= link_to '戻る', quizzes_path, class: 'button' %>

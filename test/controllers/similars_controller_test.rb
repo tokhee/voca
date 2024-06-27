@@ -1,7 +1,7 @@
 require "test_helper"
 
 class SimilarsControllerTest < ActionDispatch::IntegrationTest
-  test "should get new" do
+  test "should get form" do
     get similars_new_url
     assert_response :success
   end

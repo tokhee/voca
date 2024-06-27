@@ -10,18 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_13_125150) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_27_072830) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "questions", force: :cascade do |t|
-    t.string "title"
-    t.bigint "quiz_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "word_id", null: false
+    t.bigint "quiz_id", null: false
     t.string "user_answer"
     t.boolean "answered", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "question_order"
+    t.boolean "correct", default: false
+    t.index ["quiz_id", "question_order"], name: "index_questions_on_quiz_id_and_question_order", unique: true
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
     t.index ["word_id"], name: "index_questions_on_word_id"
   end
@@ -29,9 +31,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_13_125150) do
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
     t.bigint "user_id", null: false
+    t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "score", default: 0
+    t.integer "current_question_id"
     t.index ["user_id"], name: "index_quizzes_on_user_id"
   end
 
@@ -54,16 +57,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_13_125150) do
   end
 
   create_table "tags_words", id: false, force: :cascade do |t|
-    t.bigint "word_id", null: false
-    t.bigint "tag_id", null: false
-    t.index ["tag_id"], name: "index_tags_words_on_tag_id"
-    t.index ["word_id"], name: "index_tags_words_on_word_id"
+    t.bigint "tag_id"
+    t.bigint "word_id"
+    t.index ["tag_id", "word_id"], name: "index_tags_words_on_tag_id_and_word_id", unique: true
+    t.index ["word_id", "tag_id"], name: "index_tags_words_on_word_id_and_tag_id", unique: true
   end
 
   create_table "user_answers", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "question_id", null: false
     t.string "answer"
+    t.boolean "correct", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_user_answers_on_question_id"
@@ -83,6 +87,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_13_125150) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "word_tags", force: :cascade do |t|
+    t.bigint "word_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_word_tags_on_tag_id"
+    t.index ["word_id"], name: "index_word_tags_on_word_id"
+  end
+
   create_table "words", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "title", null: false
@@ -97,7 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_13_125150) do
     t.index ["user_id"], name: "index_words_on_user_id"
   end
 
-  add_foreign_key "questions", "quizzes"
+  add_foreign_key "questions", "quizzes", on_delete: :cascade
   add_foreign_key "questions", "words"
   add_foreign_key "quizzes", "users"
   add_foreign_key "similars", "words"
@@ -105,6 +118,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_13_125150) do
   add_foreign_key "tags", "words"
   add_foreign_key "user_answers", "questions"
   add_foreign_key "user_answers", "users"
+  add_foreign_key "word_tags", "tags"
+  add_foreign_key "word_tags", "words"
   add_foreign_key "words", "similars"
   add_foreign_key "words", "tags"
   add_foreign_key "words", "users"

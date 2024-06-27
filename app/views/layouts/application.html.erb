@@ -9,9 +9,10 @@
   <style>
       body {
           font-family: 'Arial', sans-serif;
-          margin: 0;
+          margin: 0 auto;
           padding: 0;
       }
+
       header {
           background-color: #f8f9fa;
           padding: 1rem;
@@ -33,6 +34,31 @@
           color: #333;
           text-decoration: none;
       }
+
+      /* 페이징 스타일 */
+      .pagination {
+          display: flex;
+          justify-content: center;
+          margin-top: 10px;
+          border-top: none;
+      }
+
+      .pagination a,
+      .pagination span {
+          margin: 0 3px;
+          padding: 8px 8px;
+          border-radius: 1px;
+          text-decoration: none;
+          color: #000000;
+
+      }
+
+      .pagination .current,
+      .pagination a:hover {
+          background-color: #000000;
+          color: white;
+          border-color: #f2f2f2;
+      }
   </style>
 </head>
 <body>
@@ -50,9 +76,9 @@
     <div class="nav-r"></div>
   </nav>
 </header>
-<main>
+<inner>
   <%= yield %>
-</main>
+</inner>
 <%= javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module' %>
 </body>
 </html>

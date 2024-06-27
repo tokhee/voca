@@ -11,7 +11,7 @@ class WordsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
+  test "should get form" do
     get words_new_url
     assert_response :success
   end

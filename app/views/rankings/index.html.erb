@@ -1,20 +1,77 @@
-<h1>사용자 랭킹</h1>
-<table>
-  <thead>
-  <tr>
-    <th>순위</th>
-    <th>사용자명</th>
-    <th>정답률</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @users.each_with_index do |user, index| %>
+<!-- app/views/rankings/index.html.erb -->
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+    th, td {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .highlight {
+        font-weight: bold;
+        background-color: #e7f3fe;
+    }
+    .button {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #282c34;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #3c4048;
+    }
+
+    .back-button {
+        display: flex;
+        justify-content: end;
+
+    }
+</style>
+
+<div class="container">
+  <h1>사용자 랭킹</h1>
+  <table>
+    <thead>
     <tr>
-      <td><%= index + 1 %></td>
-      <td><%= user.username %></td>
-      <td><%= user.correct_rate.round(2) %> %</td>
+      <th>순위</th>
+      <th>사용자명</th>
+      <th>정답률</th>
     </tr>
-  <% end %>
-  </tbody>
-</table>
-<%= link_to '메인 메뉴로 돌아가기', main_menu_path %>
+    </thead>
+    <tbody>
+    <% @users.each_with_index do |user, index| %>
+      <tr class="<%= 'highlight' if user == current_user %>">
+        <td><%= index + 1 %></td>
+        <td><%= user.username %></td>
+        <td><%= user.correct_rate %> %</td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="back-button">
+    <%= link_to '戻る', main_menu_path, class: 'button' %>
+  </div>
+</div>

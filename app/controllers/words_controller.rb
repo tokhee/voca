@@ -1,9 +1,13 @@
+# app/controllers/words_controller.rb
+
+require 'csv'
+
 class WordsController < ApplicationController
   before_action :set_word, only: %i[show edit update destroy]
   before_action :require_login
 
   def index
-    @words = current_user.words.page(params[:page]).per(10)
+    @words = current_user.words.includes(:tags, :similars).page(params[:page]).per(10)
 
     if params[:search].present?
       search_word = "%#{params[:search]}%"
@@ -23,9 +27,10 @@ class WordsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { print }
+      format.csv { send_csv }
     end
   end
+
 
   def show
   end
@@ -43,7 +48,7 @@ class WordsController < ApplicationController
     if @word.save
       redirect_to @word
     else
-      render :new
+      render :form
     end
   end
 
@@ -60,6 +65,8 @@ class WordsController < ApplicationController
   end
 
   def destroy
+    @word.destroy
+    redirect_to words_url, notice: 'Word was successfully destroyed.'
   end
 
   private
@@ -73,10 +80,13 @@ class WordsController < ApplicationController
   end
 
   def require_login
-    redirect_to login_path unless session[:user_id]
+    unless session[:user_id]
+      flash[:error] = "You must be logged in to access this section"
+      redirect_to login_url
+    end
   end
 
-  def print
+  def send_csv
     csv_data = CSV.generate do |csv|
       csv << %w[title mean similar]
       @words.each do |word|
