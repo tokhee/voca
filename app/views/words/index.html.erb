@@ -1,143 +1,137 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>Word List</title>
+<style>
+.title{
+    text-align: center;
+}
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-  <link rel="stylesheet" href="<%= asset_path('grid.css') %>">
-  <link rel="stylesheet" href="<%= asset_path('main.min.css') %>">
-  <link rel="stylesheet" href="<%= asset_path('ss-standard.css') %>">
-  <link rel="stylesheet" href="<%= asset_path('application.css') %>">
-  <style>
-      .container {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-      }
-      .box {
-          border: 1px solid #000;
-          margin: 10px;
-          padding: 10px;
-          width: 300px;
-          box-sizing: border-box;
-      }
-      .box img {
-          max-width: 100%;
-          height: auto;
-      }
-      .box h2 {
-          margin: 0;
-      }
-      .box .buttons {
-          margin-top: 0.5rem;
-      }
-      .box .buttons a {
-          margin-right: 0.5rem;
-      }
-      .search-section .form-group {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-      }
-      .search-section .form-control.half-width {
-          width: 50%;
-          margin-bottom: 1rem;
-      }
-      .search-section .form-control.full-width {
-          width: 100%;
-          margin-bottom: 1rem;
-      }
-      .search-section .primary-button {
-          background-color: #007bff;
-          color: white;
-          border: none;
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-      }
-      .index-container {
-          margin: 20px;
-          text-align: center;
-      }
-      .index-container .search-container {
-          margin-bottom: 1rem;
-      }
-      .index-container .button {
-          margin-right: 0.5rem;
-      }
-      .table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 1rem;
-      }
-      .table th, .table td {
-          border: 1px solid #ddd;
-          padding: 8px;
-          text-align: left;
-      }
-      .table th {
-          background-color: #f2f2f2;
-      }
-      .pagination {
-          display: flex;
-          justify-content: center;
-          margin-top: 1rem;
-      }
-  </style>
-</head>
-<body>
-<section class="search-section">
-  <div>
-    <%= form_with(url: words_path, method: "get", local: true, html: { class: "form" }) do |form| %>
-      <fieldset class="form-group">
-        <%= form.select :column, [['title', 'title'], ['mean', 'mean'], ['tag', 'tag'], ['similar', 'similar']], { include_blank: 'Select column...' }, class: "form-control half-width" %>
-        <%= form.text_field :search, placeholder: "検索キーワードを入力してください", class: "form-control full-width" %>
-        <%= form.submit "検索", class: "primary-button" %>
-      </fieldset>
-    <% end %>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+    th, td {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    th {
+        background-color: #4D4D4D;
+        color: white;
+    }
+    .pagination {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    .pagination a {
+        color: #0078D7;
+        margin: 0 0.5rem;
+        text-decoration: none;
+    }
+.search-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-group {
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+    width: 100%;
+}
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .menu ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+    .menu ul li {
+        margin-right: 0;
+    }
+    .menu ul li a {
+        text-decoration: none;
+        color: #282c34;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+    .menu ul li a:hover {
+        background-color: #282c34;
+        color: white;
+    }
+</style>
+
+<h3 class="title">単語マスタ</h3>
+<div class="container">
+  <section class="search-section">
+    <div>
+      <%= form_with(url: words_path, method: "get", local: true, html: { class: "form" }) do |form| %>
+        <fieldset class="form-group">
+          <%= form.select :column, [['title', 'title'], ['mean', 'mean'], ['tag', 'tag'], ['similar', 'similar']], { include_blank: 'Select column...' }, class: "form-control half-width" %>
+          <%= form.text_field :search, placeholder: "検索キーワードを入力してください", class: "form-control full-width" %>
+          <%= form.submit "検索", class: "primary-button" %>
+        </fieldset>
+      <% end %>
+    </div>
+  </section>
+  <div class="search-container menu">
+    <ul>
+      <li>
+
+          <%= link_to "Export", words_path(format: :csv, search: params[:search], column: params[:column]), class: "primary-button" %>
+      </li>
+      <li>
+
+          <%= link_to "New", new_word_path %>
+      </li>
+    </ul>
   </div>
-</section>
 
-<div class="index-container">
-  <div class="search-container">
-    <%= link_to "Export", words_path(format: :csv, search: params[:search], column: params[:column]), class: "button primary-button" %>
-    <%= link_to "New", new_word_path, class: "button primary-button" %>
-  </div>
-</div>
-
-<table class="table">
-  <thead>
-  <tr>
-    <th>N°</th>
-    <th>title</th>
-    <th>mean</th>
-    <th>tag</th>
-    <th>similar word</th>
-    <th>create date</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @words.each_with_index do |word, index| %>
+  <table class="table">
+    <thead>
     <tr>
-      <td><%= index + 1 + ((@words.current_page - 1) * @words.limit_value) %></td>
-      <td><%= word.title %></td>
-      <td><%= word.mean %></td>
-      <td>
-        <%= word.tags.map(&:name).join(', ') %>
-      </td>
-
-      <td>
-        <%= word.similars.map(&:similar).join(', ') %>
-      </td>
-      <td><%= word.created_at.strftime("%Y-%m-%d %H:%M") %></td>
-      <td><%= link_to "edit", edit_word_path(word), class: "button" %></td>
+      <th>N°</th>
+      <th>title</th>
+      <th>mean</th>
+      <th>tag</th>
+      <th>similar word</th>
+      <th>create date</th>
+      <th>Actions</th>
     </tr>
-  <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+    <% @words.each_with_index do |word, index| %>
+      <tr>
+        <td><%= index + 1 + ((@words.current_page - 1) * @words.limit_value) %></td>
+        <td><%= word.title %></td>
+        <td><%= word.mean %></td>
+        <td>
+          <%= word.tags.map(&:name).join(', ') %>
+        </td>
+        <td>
+          <%= word.similars.map(&:similar).join(', ') %>
+        </td>
+        <td><%= word.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= link_to "edit", edit_word_path(word), class: "button" %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 
-<div class="pagination">
-  <%= paginate @words %>
+  <div class="pagination">
+    <%= paginate @words %>
+  </div>
 </div>
-</body>
-</html>

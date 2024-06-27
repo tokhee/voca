@@ -6,29 +6,53 @@
   <meta name="csrf-token" content="<%= form_authenticity_token %>">
   <%= stylesheet_link_tag 'application', 'data-turbo-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module' %>
+  <style>
+      body {
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      header {
+          background-color: #f8f9fa;
+          padding: 1rem;
+      }
+      nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+      .nav-l, .nav-r {
+          flex: 1;
+      }
+      .nav-c {
+          flex: 2;
+          text-align: center;
+      }
+      #title {
+          font-size: 1.5rem;
+          color: #333;
+          text-decoration: none;
+      }
+  </style>
 </head>
 <body>
+
 <header>
   <nav>
-
-    <div class="nav-l">
-    </div>
+    <div class="nav-l"></div>
     <div class="nav-c">
       <% if current_user %>
         <a id="title" href="<%= main_menu_path %>">単語帳</a>
       <% else %>
         <a id="title" href="<%= login_path %>">単語帳</a>
-
       <% end %>
     </div>
-    <div class="nav-r">
-
-
-    </div>
+    <div class="nav-r"></div>
   </nav>
-
 </header>
-<%= yield %>
-
+<main>
+  <%= yield %>
+</main>
+<%= javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module' %>
 </body>
 </html>
