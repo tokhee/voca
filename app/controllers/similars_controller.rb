@@ -10,7 +10,7 @@ class SimilarsController < ApplicationController
     if @similar.save
       redirect_to @similar
     else
-      render :new
+      render :form
     end
   end
 

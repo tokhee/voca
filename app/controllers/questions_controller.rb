@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:update]
   before_action :set_question, only: [:show, :update]
+  skip_before_action :verify_authenticity_token, only: [:update]
 
   def show
     load_question_data(@question)
@@ -9,7 +9,11 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
+      @question.correct = @question.user_answer == @question.word.mean
+      @question.save
+
       @question.quiz.update_current_question(@question)
+      @question.quiz.calculate_score
 
       load_question_data(@question.quiz.current_question)
       set_navigation_ids(@question.quiz.current_question) # 여기에서 호출
