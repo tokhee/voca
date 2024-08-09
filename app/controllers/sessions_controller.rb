@@ -1,37 +1,26 @@
-# frozen_string_literal: true
-
 class SessionsController < ApplicationController
-  before_action :set_current_user
-
-  def index
-
-  end
-  def new
-  end
+  skip_before_action :require_sign_in!, only: [:new, :create]
+  before_action :set_user, only: [:create]
 
   def create
-    if params[:session].present?
-      @user = User.find_by(email: params[:session][:email].downcase)
-      if @user&.authenticate(params[:session][:password])
-        session[:user_id] = @user.id
-        redirect_to main_menu_path(@user)
-      else
-        render :new
-      end
+    if @user&.authenticate(params[:session][:password])
+      sign_in(@user)
+      redirect_to main_menu_path
+    else
+      flash.now[:danger] = 'Eメール/パスワードの組み合わせが無効です'
+      render :new
     end
   end
 
+
   def destroy
-    session[:user_id] = nil
+    sign_out
     redirect_to login_path
   end
 
   private
 
-  def set_current_user
-    if session[:user_id]
-      @user = User.find_by(id: session[:user_id])
-    end
+  def set_user
+    @user = User.find_by(email: params[:session][:email].downcase)
   end
-
 end

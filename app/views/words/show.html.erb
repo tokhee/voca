@@ -1,1 +1,13 @@
-<%= link_to "word list", controller: :words, action: :index %> %>>
+<div class ="word-show-box">
+<%= link_to "Word List", words_path, class: "nav-link" %>
+<%= @word.title %>
+
+<%= @word.mean %>
+
+Tags: <%= @word.tags.map(&:name).join(', ') %>
+
+Similar Words: <%= @word.similars.map(&:similar).join(', ') %>
+
+Created at: <%= @word.created_at.strftime("%Y-%m-%d %H:%M") %>
+<%= link_to "Edit", edit_word_path(@word), class: "button" %> <%= link_to "delete", word_path(@word), method: :delete, data: { confirm: '単語を本当に削除しますか?' }, class: "button delete-button" %>
+</div>

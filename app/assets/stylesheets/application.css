@@ -38,3 +38,62 @@
     color: white;
     border-color: #f2f2f2;
 }
+
+body {
+     font-family: 'Arial', sans-serif;
+     padding: 0;
+}
+
+header {
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav-l, .nav-r {
+    flex: 1;
+}
+.nav-c {
+    flex: 2;
+    text-align: center;
+}
+#title {
+    font-size: 50px;
+    color: #333;
+    text-decoration: none;
+}
+
+.button{
+    text-decoration: none;
+    color: #4D4D4D;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #fffff0;
+    color: #4D4D4D;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+th, td {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+th {
+    background-color: #4D4D4D;
+    color: white;
+}
+
+a{
+    text-decoration: none;
+}

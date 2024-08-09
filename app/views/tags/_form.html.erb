@@ -1,0 +1,11 @@
+<div class="tag-new-box">
+  <%= form_with(model: @tag, local: true) do |form| %>
+    <div class="tag-new-form-group">
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+    </div>
+    <div class="tag-new-form-group">
+      <%= form.submit %>
+    </div>
+  <% end %>
+</div>

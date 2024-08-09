@@ -1,16 +1,21 @@
-<!-- app/views/questions/_question.html.erb -->
-<div id="question-<%= question.id %>" data-next-question-id="<%= next_question_id %>" data-prev-question-id="<%= previous_question_id %>">
-  <p><%= question.word.title %></p>
-
-  <form action="<%= question_path(question, format: :js) %>" method="post" class="question-form">
-    <p>질문 <%= question_index %> / <%= total_questions %></p>
-
-    <% choices.each do |choice| %>
-      <div>
-        <input type="radio" name="question[user_answer]" value="<%= choice %>">
-        <label><%= choice %></label>
+<div class="q_info" id="question-<%= question.id %>" data-next-question-id="<%= next_question_id %>" data-prev-question-id="<%= previous_question_id %>" data-question-index="<%= question_index %>" data-total-questions="<%= total_questions %>">
+  <div class="question-box">
+    <form action="<%= question_path(question, format: :js) %>" method="post" class="question-form">
+      <div class="question-number">
+        질문 <%= question_index + 1 %> / <%= total_questions %>
       </div>
-    <% end %>
-    <input type="hidden" name="question[answered]" value="true">
-  </form>
+      <div class="question-title">
+        <p>Q. <%= question.word.title %>의 의미는?</p>
+      </div>
+      <div class="question-choice">
+        <% choices.each do |choice| %>
+          <div>
+            <input type="radio" name="question[user_answer]" value="<%= choice %>">
+            <label><%= choice %></label>
+          </div>
+        <% end %>
+      </div>
+      <input type="hidden" name="question[answered]" value="true">
+    </form>
+  </div>
 </div>

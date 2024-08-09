@@ -1,4 +1,12 @@
-<h1>사용자 랭킹</h1>
+<style>
+    .highlighted {
+        background-color: #f0f8ff; /* 원하는 색상으로 변경 가능 */
+    }
+
+</style>
+
+<div class="ranking-index-box">
+<p class = "ranking-index-title">ランク</p>
 <table>
   <thead>
   <tr>
@@ -8,13 +16,19 @@
   </tr>
   </thead>
   <tbody>
-  <% @users.each_with_index do |user, index| %>
-    <tr>
+  <% @user_correct_rates.each_with_index do |data, index| %>
+    <tr class="<%= 'highlighted' if data[:user] == current_user %>">
       <td><%= index + 1 %></td>
-      <td><%= user.username %></td>
-      <td><%= user.correct_rate.round(2) %> %</td>
+      <td>
+        <% if data[:user] == current_user %>
+          <strong><%= data[:user].username %></strong>
+        <% else %>
+          <%= data[:user].username %>
+        <% end %>
+      </td>      <td><%= data[:correct_rate].round(2) %>%</td>
     </tr>
   <% end %>
   </tbody>
 </table>
-<%= link_to '메인 메뉴로 돌아가기', main_menu_path %>
+</div>
+

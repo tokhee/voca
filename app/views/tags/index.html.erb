@@ -1,96 +1,18 @@
-<style>
-    .title {
-        text-align: center;
-    }
-    .container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 1rem;
-        background-color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-    }
-    th, td {
-        padding: 1rem;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-    th {
-        background-color: #4D4D4D;
-        color: white;
-    }
-    .pagination {
-        text-align: center;
-        margin-top: 1rem;
-    }
-    .pagination a {
-        color: #0078D7;
-        margin: 0 0.5rem;
-        text-decoration: none;
-    }
-    .search-section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .form-group {
-        display: flex;
-        justify-content: space-between;
+<div class="tag-index-box">
 
-        align-items: center;
-        width: 100%;
-    }
-    .search-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-    }
-    .menu ul {
-        list-style-type: none;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-    }
-    .menu ul li {
-        margin-right: 0;
-    }
-    .menu ul li a {
-        text-decoration: none;
-        color: #282c34;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-    .menu ul li a:hover {
-        background-color: #282c34;
-        color: white;
-    }
-</style>
+<p class="tag-index-title">単語タグマスタ</p>
 
-
-<h3 class="title">単語タグマスタ</h3>
-<div class="container">
-
-<section class="search-section">
+<section class="tag-index-search">
   <%= form_with(url: tags_path, method: "get", local: true, html: { class: "form" }) do |form| %>
-    <fieldset class="form-group">
-      <%= form.text_field :search, class: "form-control half-width", placeholder: "検索キーワードを入力してください" %>
-      <%= form.submit "検索", class: "button primary-button" %>
+    <fieldset class="tag-index-search-field">
+      <%= form.text_field :search, class: "tag-index-search-form", placeholder: "検索キーワードを入力してください" %>
+      <%= form.submit "検索", class: "button" %>
     </fieldset>
   <% end %>
 </section>
 
-  <div class="search-container menu">
-    <ul>
-      <li>
-        <%= link_to "new", new_tag_path, class: "button primary-button" %>
-      </li>
-    </ul>
+  <div class="tag-index-new">
+        <%= link_to "new", new_tag_path, class: "button" %>
   </div>
 
   <table class="table">
@@ -98,15 +20,23 @@
     <tr>
       <th>name</th>
       <th>create date</th>
+      <th>word number</th>
       <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     <% @tags.each do |tag| %>
       <tr>
-        <td><%= tag.name %></td>
+        <td><%= link_to tag.name, tag_path(tag) %></td>
         <td><%= tag.created_at.strftime("%Y-%m-%d %H:%M") %></td>
-        <td><%= link_to "edit", edit_tag_path(tag), class: "button" %></td>
+        <td><%= tag.words.count %></td>
+
+        <td>
+          <%= link_to "修正", edit_tag_path(tag), class: "button" %>
+
+          <!--삭제버튼만 button_to를 쓴 이유는 link_to로 하면 삭제가 아니라 문제 응시페이지로 가기때문-->
+          <%= button_to '削除', tag_path(tag), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
     </tbody>

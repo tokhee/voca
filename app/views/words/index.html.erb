@@ -10,29 +10,6 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-    }
-    th, td {
-        padding: 1rem;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-    th {
-        background-color: #4D4D4D;
-        color: white;
-    }
-    .pagination {
-        text-align: center;
-        margin-top: 1rem;
-    }
-    .pagination a {
-        color: #0078D7;
-        margin: 0 0.5rem;
-        text-decoration: none;
-    }
 .search-section {
     display: flex;
     justify-content: center;
@@ -125,7 +102,10 @@
           <%= word.similars.map(&:similar).join(', ') %>
         </td>
         <td><%= word.created_at.strftime("%Y-%m-%d %H:%M") %></td>
-        <td><%= link_to "edit", edit_word_path(word), class: "button" %></td>
+        <td><%= link_to "修正", edit_word_path(word), class: "button" %>
+
+          <!--삭제버튼만 button_to를 쓴 이유는 link_to로 하면 삭제가 아니라 문제 응시페이지로 가기때문-->
+          <%= button_to '削除', word_path(word), method: :delete, data: { confirm: 'Are you sure?' } %>
       </tr>
     <% end %>
     </tbody>

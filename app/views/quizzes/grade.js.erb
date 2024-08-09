@@ -1,5 +1,6 @@
 <%# app/views/quizzes/grade.js.erb %>
-document.querySelector(".results").innerHTML = ''; // Clear previous results
+document.querySelector(".results").innerHTML = '';
+
 <% @results.each do |result| %>
 document.querySelector(".results").innerHTML += `
   <div class="result">

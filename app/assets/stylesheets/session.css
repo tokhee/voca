@@ -1,0 +1,33 @@
+.session-new-box{
+    width: 700px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.session-new-form-group {
+    margin-bottom: 15px;
+}
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+}
+.session-new-form-control {
+    width: 50%;
+    padding: 8px;
+    margin-bottom: 5px;
+}
+
+.validation-message {
+    color: red;
+    font-size: 0.9em;
+    display: none; /* Initially hidden */
+}
+.valid {
+    display: block;
+    color: green;
+}
+.invalid {
+    display: block;
+    color: red;
+}

@@ -1,23 +1,80 @@
+<div class="session-new-box">
+  <% if flash[:danger] %>
+    <div class="alert alert-danger" id="flash-message">
+      <%= flash[:danger] %>
+    </div>
+  <% end %>
 
-
-<div class="login-container">
   <%= form_with(url: login_path, scope: :session, local: true) do |form| %>
-    <div class="form-group">
+    <div class="session-new-form-group">
       <%= form.label :email %>
-      <%= form.text_field :email, class: "form-control" %>
+      <%= form.text_field :email, id: "email", class: "session-new-form-control" %>
+      <div id="email-validation" class="validation-message"></div>
     </div>
 
-    <div class="form-group">
+    <div class="session-new-form-group">
       <%= form.label :password %>
-      <%= form.password_field :password, class: "form-control" %>
+      <%= form.password_field :password, id: "password", class: "session-new-form-control" %>
+      <div id="password-validation" class="validation-message"></div>
     </div>
 
-    <div class="form-group">
-      <%= form.submit "Login", class: "submit-button" %>
+    <div class="session-new-form-group">
+      <%= form.submit "Login", class: "button" %>
     </div>
 
-    <div class="form-group">
-      <%= link_to "Sign Up", signup_url, class: "signup-link" %>
+    <div class="session-new-form-group">
+      <%= link_to "会員登録", signup_url, class: "button" %>
     </div>
   <% end %>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        emailInput.addEventListener('input', validateEmail);
+        passwordInput.addEventListener('input', validatePassword);
+
+        function validateEmail() {
+            const message = document.getElementById('email-validation');
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailPattern.test(emailInput.value)) {
+                message.classList.remove('invalid');
+                message.classList.add('valid');
+            } else {
+                message.classList.remove('valid');
+                message.classList.add('invalid');
+            }
+        }
+
+        function validatePassword() {
+            const message = document.getElementById('password-validation');
+            if (passwordInput.value.length >= 1 && passwordInput.value.length <= 8) {
+                message.classList.remove('invalid');
+                message.classList.add('valid');
+            } else {
+                message.classList.remove('valid');
+                message.classList.add('invalid');
+            }
+        }
+    });
+</script>
+
+<style>
+    .validation-message {
+        font-size: 0.9em;
+        color: red;
+    }
+
+    .validation-message.valid {
+        color: green;
+    }
+
+    .alert-danger {
+        color: white;
+        background-color: red;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+</style>

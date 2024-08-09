@@ -1,50 +1,121 @@
-<div class="form-container">
-  <%= form_with(model: @word, local: true, html: { class: "form stacked-form" }) do |form| %>
-    <% if @word.errors.any? %>
-      <div class="alert error-alert">
-        <h2><%= pluralize(@word.errors.count, "error") %> prohibited this word from being saved:</h2>
-        <ul>
-          <% @word.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+<!-- app/views/words/_form.html.erb -->
+<div class="word-form-box" data-user-id="<%= current_user.id %>">
+  <div class="form-container">
+    <%= form_with(model: @word, local: true, html: { class: "form stacked-form" }) do |f| %>
+      <% if @word.errors.any? %>
+        <div class="alert error-alert">
+          <h2><%= pluralize(@word.errors.count, "error") %> prohibited this word from being saved:</h2>
+          <ul>
+            <% @word.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-    <div class="form-group">
-      <div class="form-control-group">
-        <%= form.label :title, class: "form-label" %>
-        <%= form.text_field :title, class: "form-control" %>
-      </div>
-
-      <div class="form-control-group">
-        <%= form.label :mean, class: "form-label" %>
-        <%= form.text_field :mean, class: "form-control" %>
-      </div>
-
-      <div class="form-control-group">
-        <%= form.label :similar, class: "form-label" %>
-        <div class="nested-fields-container">
-          <%= link_to_add_association 'Add Similar', form, :similars, class: "button primary-button" %>
+      <div class="form-group">
+        <div class="form-control-group">
+          <%= f.label :title, class: "form-label" %>
+          <%= f.text_field :title, class: "form-control" %>
         </div>
 
         <div class="form-control-group">
-          <%= form.label :tag, class: "form-label" %>
-          <%= form.collection_select(:tag, current_user.tags, :id, :name, {}, { class: "form-control" }) %>
-
+          <%= f.label :mean, class: "form-label" %>
+          <%= f.text_field :mean, class: "form-control" %>
         </div>
 
+        <div class="form-control-group">
+          <%= f.label :similar, class: "form-label" %>
+
+          <div class="nested-fields-container">
+            <%= link_to_add_association 'Add Similar', f, :similars, class: "button primary-button", data: {
+              association_insertion_method: 'after'
+            }%>
+            <%= f.fields_for :similars do |form| %>
+              <%= render "similar_fields", f: form %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-control-group">
+          <%= f.label :tags, class: "form-label" %>
+          <%= f.collection_select :tag_ids, current_user.tags, :id, :name, {}, { multiple: true, class: "form-control" } %>
+          <button type="button" id="add-new-tag" class="btn btn-secondary mt-2">새로 추가하기</button>
+        </div>
+
+        <div id="new-tag-form" style="display: none;" class="form-control-group mt-3">
+          <label for="new-tag-name" class="form-label">새 태그 이름</label>
+          <input type="text" id="new-tag-name" class="form-control">
+          <button type="button" id="save-new-tag" class="btn btn-primary mt-2">저장</button>
+        </div>
+
+        <div class="form-control-group">
+          <%= f.submit "Save Word", class: "button primary-button" %>
+        </div>
+
+        <div class="return-button">
+          <%= link_to '戻る', words_path, class: "button" %>
+        </div>
       </div>
-
-
-      <div class="form-control-group">
-        <%= form.submit "Save Word", class: "button primary-button" %>
-      </div>
-
-      <div class="return-button">
-        <%= link_to '戻る', words_path, class: "button" %>
-      </div>
-    </div>
-  <% end %>
-
+    <% end %>
+  </div>
 </div>
+
+<script>document.addEventListener('DOMContentLoaded', function() {
+    const addNewTagButton = document.getElementById('add-new-tag');
+    const saveNewTagButton = document.getElementById('save-new-tag');
+    const newTagForm = document.getElementById('new-tag-form');
+    const newTagNameInput = document.getElementById('new-tag-name');
+
+    addNewTagButton.addEventListener('click', function() {
+        newTagForm.style.display = 'block';
+    });
+
+    saveNewTagButton.addEventListener('click', function() {
+        const tagName = newTagNameInput.value.trim();
+        if (tagName === '') {
+            alert('태그 이름을 입력해주세요.');
+            return;
+        }
+
+        fetch('/tags', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ tag: { name: tagName } })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error(`서버 오류: ${response.status} ${response.statusText}`);
+                    throw new Error('네트워크 응답이 올바르지 않습니다');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.id) {
+                    const select = document.querySelector('select[name="word[tag_ids][]"]');
+                    if (!select) {
+                        throw new Error('선택 요소를 찾을 수 없습니다.');
+                    }
+
+                    const option = new Option(data.name, data.id, true, true);
+                    select.add(option);
+                    newTagForm.style.display = 'none';
+                    newTagNameInput.value = '';
+                } else {
+                    if (data.errors) {
+                        alert('태그 추가 중 오류가 발생했습니다: ' + data.errors.join(', '));
+                    } else {
+                        alert('태그 추가 중 오류가 발생했습니다.');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Fetch 오류:', error);
+            });
+    });
+});
+
+</script>

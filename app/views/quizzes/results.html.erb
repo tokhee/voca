@@ -1,7 +1,10 @@
 <!-- app/views/quizzes/results.html.erb -->
-<h1><%= @quiz.title %> の結果</h1>
 
-<div class="results">
+<div class="quiz-result-box">
+  <p class="quiz-result-title">結果</p>
+  <p class="quiz-result-score">
+    あなたのスコア: <%= @quiz.score %> / <%= @results.length %>
+  </p>
 
   <table class="table">
     <thead>
@@ -22,10 +25,8 @@
     </tbody>
   </table>
 
-  <div class="score">
-    <p>あなたのスコア: <%= @quiz.score %> / <%= @results.length %></p>
-  </div>
 
-</div>
+
 
 <%= link_to '戻る', quizzes_path, class: 'button' %>
+</div>

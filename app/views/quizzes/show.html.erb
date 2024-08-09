@@ -1,25 +1,38 @@
 <!-- app/views/quizzes/show.html.erb -->
-<h1><%= @quiz.title %></h1>
+<div class = "quiz-show-box">
+
+<p class="quiz-show-title"><%= @quiz.title %></p>
+<p class="quiz-show-date"><%= @quiz.created_at %></p>
 
 <% if @current_question %>
   <div id="question-container" class="question-box">
-    <%= render partial: 'questions/question', locals: { question: @current_question, choices: @choices, next_question_id: @next_question_id, previous_question_id: @previous_question_id, question_index: @questions.index(@current_question) + 1, total_questions: @questions.size } %>
+    <%= render partial: 'questions/question', locals: { question: @current_question,
+                                                        choices: @choices,
+                                                        next_question_id: @next_question_id,
+                                                        previous_question_id: @previous_question_id,
+                                                        question_index: @questions.index(@current_question),
+                                                        total_questions: @questions.size } %>
+
   </div>
 
-  <div class="controls">
-    <button id="prev-btn" data-url="#">前の問題へ</button>
-    <button id="next-btn" data-url="#">次の問題へ</button>
+
+  <div class="quiz-show-btn-controls">
+    <button id="prev-btn" class="button" data-url="#">前の問題へ</button>
+    <button id="next-btn" class="button" data-url="#">次の問題へ</button>
     <%= button_to '中断する', save_quiz_path(@quiz), method: :post, class: 'button' %>
     <%= button_to '採点する', grade_quiz_path(@quiz), method: :post, class: 'button' %>
   </div>
+
 <% else %>
   <p>퀴즈에 질문이 없습니다.</p>
   <%= link_to '퀴즈 목록으로 돌아가기', quizzes_path, class: 'button' %>
 <% end %>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const loadQuestion = (url) => {
+            console.log('loadQuestion 호출됨:', url);  // 로그 추가
             fetch(url, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
@@ -32,7 +45,8 @@
                   return response.text();
               })
               .then(data => {
-                  document.querySelector('#question-container').innerHTML = data;
+                  const questionContainer = document.getElementById('question-container');
+                  questionContainer.innerHTML = data;
                   updateControls();
               })
               .catch(error => console.error('Error:', error));
@@ -41,13 +55,18 @@
         const updateControls = () => {
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
-            const questionContainer = document.querySelector('#question-container > div');
+            const questionContainer = document.querySelector(".q_info");
             const nextQuestionId = questionContainer.dataset.nextQuestionId;
             const prevQuestionId = questionContainer.dataset.prevQuestionId;
+            const questionIndex = parseInt(questionContainer.dataset.questionIndex, 10);
+            const totalQuestions = parseInt(questionContainer.dataset.totalQuestions, 10);
 
-            console.log('Pre Question ID:', prevQuestionId);
+            console.log('Previous Question ID:', prevQuestionId);
             console.log('Next Question ID:', nextQuestionId);
+            console.log('Question Index:', questionIndex);
+            console.log('Total Questions:', totalQuestions);
 
+            // 이전 버튼 처리
             if (prevBtn) {
                 if (prevQuestionId && prevQuestionId !== "") {
                     prevBtn.style.display = 'inline-block';
@@ -59,11 +78,12 @@
                 prevBtn.addEventListener('click', handlePrevClick);
             }
 
+            // 다음 버튼 처리
             if (nextBtn) {
                 if (nextQuestionId && nextQuestionId !== "") {
                     nextBtn.style.display = 'inline-block';
                     nextBtn.dataset.url = `/questions/${nextQuestionId}.js`;
-                } else {
+                } else if (questionIndex === totalQuestions - 1) {
                     nextBtn.style.display = 'none';
                 }
                 nextBtn.removeEventListener('click', handleNextClick);
@@ -71,9 +91,12 @@
             }
         };
 
+
+
         const handlePrevClick = (event) => {
             event.preventDefault();
             const prevBtn = event.currentTarget;
+            console.log('이전 버튼 클릭됨:', prevBtn.dataset.url);  // 로그 추가
             if (prevBtn.dataset.url !== '#') {
                 loadQuestion(prevBtn.dataset.url);
             }
@@ -82,11 +105,14 @@
         const handleNextClick = (event) => {
             event.preventDefault();
             const nextBtn = event.currentTarget;
-            const form = document.querySelector('.question-form');
+            console.log('다음 버튼 클릭됨:', nextBtn.dataset.url);  // 로그 추가
+
+            const form = document.querySelector(".question-form");
             if (!form) {
                 console.error('폼을 찾을 수 없습니다');
                 return;
             }
+            console.log('폼 데이터:', new FormData(form));  // 로그 추가
             const formData = new FormData(form);
 
             fetch(form.action, {
@@ -105,7 +131,8 @@
                   }
               })
               .then(data => {
-                  document.querySelector('#question-container').innerHTML = data;
+                  console.log('질문 업데이트 성공');  // 로그 추가
+                  document.getElementById('question-container').innerHTML = data;
                   updateControls();
               })
               .catch(error => {
@@ -113,6 +140,14 @@
               });
         };
 
-        updateControls();
+        // 폼의 입력 필드 변경 시 로그 출력
+        const form = document.querySelector(".question-form");
+        if (form) {
+            form.addEventListener('input', (event) => {
+                console.log('폼 입력 변경됨:', event.target.name, event.target.value);  // 로그 추가
+            });
+        }
+
+        updateControls(); // 초기화 시 버튼 상태 업데이트
     });
 </script>

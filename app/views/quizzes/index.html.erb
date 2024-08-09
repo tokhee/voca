@@ -1,16 +1,42 @@
+<div class="quiz-index-box">
+  <p class="quiz-index-title">クイズ一覧</p>
 
+  <div class="quiz-index-all-btn">
+    <%= button_to '新しく単語帳を始める', create_quiz_path, method: :post, class: 'button' %>
+  </div>
 
-<h1>퀴즈 목록</h1>
-<%= button_to '新しく単語帳を始める', create_quiz_path, method: :post, class: 'button' %><div class="quizzes">
-  <% @quizzes.each do |quiz| %>
-    <div class="quiz">
-      <h2><%= quiz.title %></h2>
-      <p>점수: <%= quiz.score || '아직 채점되지 않음' %></p>
-        <%= link_to '回答を見る', results_quiz_path(quiz), class: 'button' %>
-        <%= link_to '続きから', continue_quiz_path(quiz), class: 'button' %>
-        <%= link_to 'もう一度やる', restart_quiz_path(quiz), class: 'button' %>
-    </div>
-  <% end %>
+  <div class="quiz-index-list">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>NO</th>
+        <th>title</th>
+        <th>DATE</th>
+        <th>SCORE</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @quizzes.each_with_index do |quiz, index| %>
+        <tr>
+          <td><%= index + 1 + ((@quizzes.current_page - 1) * @quizzes.limit_value) %></td>
+          <td><%= quiz.title %></td>
+          <td><%= quiz.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+          <td><%= quiz.score || '아직 채점되지 않음' %></td>
+          <td class="quiz-index-list-btn">
+            <%= link_to '回答を見る', results_quiz_path(quiz), class: 'button' %>
+            <%= link_to '続きから', continue_quiz_path(quiz), class: 'button' %>
+            <%= link_to 'もう一度やる', restart_quiz_path(quiz), class: 'button' %>
+<!--삭제버튼만 button_to를 쓴 이유는 link_to로 하면 삭제가 아니라 문제 응시페이지로 가기때문-->
+            <%= button_to '削除', quiz_path(quiz), method: :delete, data: { confirm: 'Are you sure?' } %>
+
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @quizzes %>
 </div>
-
-<%= paginate @quizzes %>

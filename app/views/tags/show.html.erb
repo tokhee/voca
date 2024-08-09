@@ -1,0 +1,24 @@
+<div class = "tag-show-box">
+
+<%= link_to "クイズ一覧", tags_path, class: "nav-link" %>
+
+  <p class="tag-show-title"><%= @tag.name %></p>
+
+<table>
+  <thead>
+  <tr>
+    <th>単語</th>
+    <th>作成日</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @tag.words.each do |word| %>
+    <tr>
+      <td><%= word.title %></td>
+      <td><%= word.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+</div>
